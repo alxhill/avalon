@@ -1,6 +1,20 @@
-var http = require('http');
-http.createServer(function (req, res) {
-  res.writeHead(200, {'Content-Type': 'text/html'});
-  res.end('<b>Sam sucks</b>\n');
-}).listen(8080, '127.0.0.1');
-console.log('Server running at http://127.0.0.1:1337/');
+var express = require('express');
+var app = express();
+
+var gameState = null;
+
+app.get('/', function(req, res) {
+    res.sendFile(__dirname + "/index.html");
+});
+
+app.get('/client.js', function(req, res) {
+    res.sendFile(__dirname + "/client.js");
+});
+
+var server = app.listen(8080, function() {
+    var host = server.address().address;
+    var port = server.address().port;
+
+    console.log("Avalon app listening at http://%s:%s", host, port);
+
+});

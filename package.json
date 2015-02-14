@@ -1,0 +1,23 @@
+{
+  "name": "avalon",
+  "version": "1.0.0",
+  "description": "Avalon for true nerds",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/alxhill/avalon.git"
+  },
+  "author": "Team Lemon Slice",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/alxhill/avalon/issues"
+  },
+  "homepage": "https://github.com/alxhill/avalon",
+  "dependencies": {
+    "express": "^4.11.2"
+  }
+}

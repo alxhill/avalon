@@ -12,12 +12,12 @@ app.get('/client.js', function(req, res) {
 });
 
 app.post('/start/:players', function(req, res) {
+    if (gameState)
+        return res.status(400).send("A game is currently in progress, please end the current game before starting a new one");
     var players = parseInt(req.params.players);
 
-    if (players < 5 || players > 10) {
-        res.status(400).send("must be between 5 and 10 players");
-        return;
-    }
+    if (players < 5 || players > 10)
+        return res.status(400).send("must be between 5 and 10 players");
 
     gameState = {
         playerCount: players,
@@ -29,12 +29,17 @@ app.post('/start/:players', function(req, res) {
 });
 
 app.post('/addplayer/:name', function(req, res) {
-    if (gameState.players.length >= playerCount)
+    if (gameState == null)
+        return res.status(400).send("game has not been started");
+
+    if (gameState.players.length >= gameState.playerCount)
         return res.status(400).send("all players have already joined");
 
     gameState.players.push(req.params.name);
-    if (gameState.players.length == playerCount)
+    if (gameState.players.length == gameState.playerCount)
         gameState.started = true;
+
+    res.send("Added player " + req.params.name);
 });
 
 var server = app.listen(8080, function() {

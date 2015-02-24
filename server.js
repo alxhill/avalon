@@ -1,15 +1,10 @@
 var express = require('express');
+var path = require('path');
 var app = express();
 
 var gameState = null;
 
-app.get('/', function(req, res) {
-    res.sendFile(__dirname + "/index.html");
-});
-
-app.get('/client.js', function(req, res) {
-    res.sendFile(__dirname + "/client.js");
-});
+app.use(express.static(path.join(__dirname, 'public')));
 
 app.post('/start/:players', function(req, res) {
     if (gameState)

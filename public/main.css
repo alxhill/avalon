@@ -1,0 +1,83 @@
+body {
+    font-size: 62.5%;
+    font-family: 'Junge', serif;
+    background-color: black;
+    color: white;
+    box-sizing: border-box;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Cinzel Decorative', cursive;
+}
+
+h1 {
+    text-align: center;
+    font-size: 5em;
+    letter-spacing: 4px;
+    font-weight: 400;
+}
+
+#main {
+    text-align: center;
+}
+
+button#new-game {
+    margin: 0 auto;
+    width: 100px;
+    height: 40px;
+    font-size: 1.5em;
+    color: rgba(0,0,0,1);
+    border: 0 rgba(0,0,0,0);
+    background-color: rgba(255, 236, 194, 1);
+}
+
+button#new-game:hover {
+    background-color: rgba(218, 191, 133, 1);
+    cursor: pointer;
+}
+
+#board {
+    position: relative;
+    margin: 0 auto;
+    padding: 0;
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+}
+
+#quests {
+    position: absolute;
+    width: 100%;
+    top: 30%;
+    margin: 0;
+    padding: 0;
+}
+
+.quest {
+    width: 19%; /* screw you CSS */
+    margin: 0;
+    padding: 0;
+    display: inline-block;
+}
+
+.quest h3 {
+    font-family: 'Cinzel', cursive;
+    font-size: 3em;
+    font-weight: 900;
+    text-shadow: 1px 1px 0 black;
+}
+
+.place-container {
+    position: relative;
+}
+
+.place-count {
+    position: absolute;
+    top: 34%;
+    left: 38%;
+}
+
+.place-count-star {
+    top: 29%;
+}

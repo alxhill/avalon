@@ -38,22 +38,46 @@ html, body, main {
 
 }
 
-.card {
+.card-container {
     position: relative;
     background: red;
     flex: 1;
     height: 100%;
     text-align: center;
     flex-basis: 300px;
+    perspective: 1000;
 }
 
-.card p {
+.card-container p {
     font-size: 4em;
     margin-top: 20px;
 }
 
 .card-good {
     background: blue;
+}
+
+.card-container .card.flip {
+    transform: rotateY(180deg);
+}
+
+.card {
+    transition: 0.6s;
+    transform-style: preserve-3d;
+    position: relative;
+}
+
+.card-front, .card-back {
+    backface-visibility: hidden;
+}
+
+.card-front {
+    z-index: 2;
+    /*transform: rotateY(0deg);*/
+}
+
+.card-back {
+    transform: rotateY(180deg)
 }
 
 .board {
@@ -74,6 +98,22 @@ html, body, main {
     -webkit-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;
+}
+
+ul.players {
+    position: absolute;
+    top: 20px;
+    left: 10px;
+}
+
+ul.players li {
+    display: inline-block;
+    font-size: 2.3em;
+    margin: 0 15px;
+}
+
+.current {
+    border-bottom: 2px solid white;
 }
 
 .quests {

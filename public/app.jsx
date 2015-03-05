@@ -3,9 +3,10 @@ import {Game} from "./components/Game"
 var GameState = {
     Players: ["Alex", "James", "Sam", "Andy", "Tom"],
     Quests: [true, false],
-    Vetos: 0,
+    Vetos: 1,
     CurrentQuest: {
-        Leader: {}, // player object
+        State: "Start", // Start, Players, Veto, Quest, End
+        Leader: 0, // index in array
         Players: [],
         Vetos: 0,
         Cards: [],

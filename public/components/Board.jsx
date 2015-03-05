@@ -55,11 +55,22 @@ var Board = React.createClass({
 
         var vetoList = [];
         for (var i=0; i < 5; i++) {
-            vetoList.push(<img key={i} src="images/board_small_circle.png" className={cx({'current-veto':i<=this.props.gameState.Vetos})}/>);
+            vetoList.push(<img key={i} src="images/board_small_circle.png" className={cx({'current-veto':i < this.props.gameState.Vetos})}/>);
         }
+
+        var playerList = this.props.gameState.Players.map(
+            (player, i) => <li
+                key={player}
+                className={cx({current:i==this.props.gameState.CurrentQuest.Leader})}>
+                {player}
+            </li>);
+        playerList.unshift(<li>Players:</li>);
 
         return (
             <div className="board">
+                <ul className="players">
+                    {playerList}
+                </ul>
                 <div className="quests">
                     {questList}
                 </div>
@@ -71,6 +82,5 @@ var Board = React.createClass({
         );
     }
 });
-
 
 export {Board};

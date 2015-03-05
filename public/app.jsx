@@ -1,6 +1,6 @@
-import {Board} from "./components/Board"
+import {Game} from "./components/Game"
 
 React.render(
-    <Board players={5}/>,
-    document.getElementById("main")
+    <Game/>,
+    document.getElementsByTagName("body")[0]
 );

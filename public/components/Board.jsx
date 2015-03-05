@@ -11,14 +11,14 @@ var QuestPlace = React.createClass({
     },
 
     render() {
-        var imageName = "images/board_" + this.props.number.toString() + (this.props.star ? "_star" : "") + ".png";
-        var className = "place-count" + (this.props.star ? " place-count-str" : "");
+        var text = this.props.number.toString() + (this.props.star ? "*" : "");
+        var title = "Quest " + this.props.quest;
         return (
             <span className="quest">
-                <h3>Quest {this.props.quest}</h3>
+                <h3>{title}</h3>
                 <div className="place-container">
-                    <img className={className} src={imageName} />
-                    <img src="images/board_circle.png"/>
+                    <p className="place-count">{text}</p>
+                    <img src="images/board_small_circle.png"/>
                 </div>
             </span>
         );
@@ -40,11 +40,10 @@ var Board = React.createClass({
         }
 
         return (
-            <div id="board">
-                <div id="quests">
+            <div className="board">
+                <div className="quests">
                     {questList}
                 </div>
-                <img src="images/board.png"/>
             </div>
         );
     }

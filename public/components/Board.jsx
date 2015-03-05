@@ -1,24 +1,35 @@
+var cx = React.addons.classSet;
+
 var QuestPlace = React.createClass({
 
     propTypes: {
-        quest: React.PropTypes.number.isRequired,
-        number: React.PropTypes.number.isRequired,
-        star: React.PropTypes.bool
+        questNumber: React.PropTypes.number.isRequired,
+        playerCount: React.PropTypes.number.isRequired,
+        star: React.PropTypes.bool,
+        visited: React.PropTypes.bool,
+        success: React.PropTypes.bool
     },
 
-    getDefaultState() {
-        return {visited: false}
+    getDefaultProps() {
+        return {
+            visited: false
+        }
     },
 
     render() {
-        var text = this.props.number.toString() + (this.props.star ? "*" : "");
-        var title = "Quest " + this.props.quest;
+        var text = this.props.playerCount.toString() + (this.props.star ? "*" : "");
+        var title = "Quest " + this.props.questNumber;
+
+        if (this.props.visited) {
+            text = this.props.success ? "✓" : "✗";
+        }
+
         return (
             <span className="quest">
                 <h3>{title}</h3>
                 <div className="place-container">
                     <p className="place-count">{text}</p>
-                    <img src="images/board_small_circle.png"/>
+                    <img src="images/board_small_circle.png" onDragStart={() => false}/>
                 </div>
             </span>
         );
@@ -26,23 +37,35 @@ var QuestPlace = React.createClass({
 });
 
 var Board = React.createClass({
-    propTypes: {
-        players: React.PropTypes.number.isRequired
-    },
-
     render() {
-        var p = this.props.players;
+        var p = this.props.gameState.Players.length;
         var questList = [];
+        // mathsy magic to figure out the right number of players in each quest
         for(var m=1; m <= 5; m++) {
             var hasStar = p >= 7 && m == 4;
             var playerCount = (2+(m>1)) + Math.floor(p/8) + (m>=4)*(p>=6) - (m<7)*(m+2==p);
-            questList.push(<QuestPlace quest={m} star={hasStar} number={playerCount} />);
+            questList.push(<QuestPlace
+                key={m}
+                questNumber={m}
+                star={hasStar}
+                playerCount={playerCount}
+                visited={m<=this.props.gameState.Quests.length}
+                success={this.props.gameState.Quests[m-1]} />);
+        }
+
+        var vetoList = [];
+        for (var i=0; i < 5; i++) {
+            vetoList.push(<img key={i} src="images/board_small_circle.png" className={cx({'current-veto':i<=this.props.gameState.Vetos})}/>);
         }
 
         return (
             <div className="board">
                 <div className="quests">
                     {questList}
+                </div>
+                <div className="vetos">
+                    <h2>Veto Track</h2>
+                    {vetoList}
                 </div>
             </div>
         );

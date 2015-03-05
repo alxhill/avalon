@@ -7,11 +7,10 @@ export var Game = React.createClass({
             <main>
                 <h1>Avalon</h1>
                 <div className="container">
-                    <Board players={8}/>
-                    <Card/>
+                    <Board gameState={this.props.gameState}/>
+                    <Card playerState={this.props.playerState}/>
                 </div>
             </main>
         );
     }
 });
-

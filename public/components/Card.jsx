@@ -1,5 +1,5 @@
 var Card = React.createClass({
-    getInitialState() {
+    getDefaultProps() {
         return {
             flip: false
         }
@@ -9,13 +9,13 @@ var Card = React.createClass({
         var cx = React.addons.classSet;
         return (
             <div className={cx({"card-container":true, "card-good":this.props.playerState.Good})}>
-                <div className={"card" + (this.state.flip ? " flip" : "")} onClick={() => this.setState({flip: !this.state.flip})}>
+                <div className={"card" + (this.props.flip ? " flip" : "")}>
                     <div className="card-front">
                         <p>{`Player Name: ${this.props.playerState.Name}`}</p>
                         <p>{`Card: ${this.props.playerState.Card}`}</p>
                     </div>
                     <div className="card-back">
-                        <p>This is the back of the card</p>
+                        {this.props.children}
                     </div>
                 </div>
             </div>

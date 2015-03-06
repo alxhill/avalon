@@ -3,32 +3,16 @@ var cx = React.addons.classSet;
 var QuestPlace = React.createClass({
 
     propTypes: {
-        questNumber: React.PropTypes.number.isRequired,
-        playerCount: React.PropTypes.number.isRequired,
-        star: React.PropTypes.bool,
-        visited: React.PropTypes.bool,
-        success: React.PropTypes.bool
-    },
-
-    getDefaultProps() {
-        return {
-            visited: false
-        }
+        text: React.PropTypes.string.isRequired,
+        title: React.PropTypes.string.isRequired
     },
 
     render() {
-        var text = this.props.playerCount.toString() + (this.props.star ? "*" : "");
-        var title = "Quest " + this.props.questNumber;
-
-        if (this.props.visited) {
-            text = this.props.success ? "✓" : "✗";
-        }
-
         return (
             <span className="quest">
-                <h3>{title}</h3>
+                <h3>{this.props.title}</h3>
                 <div className="place-container">
-                    <p className="place-count">{text}</p>
+                    <p className="place-count">{this.props.text}</p>
                     <img src="images/board_small_circle.png" onDragStart={() => false}/>
                 </div>
             </span>
@@ -39,19 +23,23 @@ var QuestPlace = React.createClass({
 var Board = React.createClass({
     render() {
         var p = this.props.gameState.Players.length;
-        var questList = [];
-        // mathsy magic to figure out the right number of players in each quest
-        for(var m=1; m <= 5; m++) {
-            var hasStar = p >= 7 && m == 4;
-            var playerCount = (2+(m>1)) + Math.floor(p/8) + (m>=4)*(p>=6) - (m<7)*(m+2==p);
-            questList.push(<QuestPlace
-                key={m}
-                questNumber={m}
-                star={hasStar}
-                playerCount={playerCount}
-                visited={m<=this.props.gameState.Quests.length}
-                success={this.props.gameState.Quests[m-1]} />);
-        }
+        // mathsy magic to figure out the number of players in each quest
+        var questList = this.props.gameState.Quests.map((quest, index) => {
+            var text, title = "Quest " + (index + 1);
+
+            if (typeof quest == "boolean") {
+                text = quest ? "✓" : "✗";
+            } else {
+                text = quest.toString();
+                if (p >= 7 && index == 3)
+                    text += "*";
+            }
+
+            return (<QuestPlace
+                key={index}
+                text={text}
+                title={title}/>);
+        });
 
         var vetoList = [];
         for (var i=0; i < 5; i++) {
@@ -61,10 +49,13 @@ var Board = React.createClass({
         var playerList = this.props.gameState.Players.map(
             (player, i) => <li
                 key={player}
-                className={cx({current:i==this.props.gameState.CurrentQuest.Leader})}>
-                {player}
-            </li>);
-        playerList.unshift(<li>Players:</li>);
+                className={cx({
+                    current:i==this.props.gameState.CurrentQuest.Leader,
+                    chosen:this.props.gameState.CurrentQuest.Players.indexOf(player)>=0
+                })}>
+                    {player}
+                </li>);
+        playerList.unshift(<li key="Players">Players:</li>);
 
         return (
             <div className="board">

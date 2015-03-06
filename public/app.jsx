@@ -3,17 +3,17 @@ import {Game} from "./components/Game"
 var GameState = {
     Players: ["Alex", "James", "Sam", "Andy", "Tom", "Ben"],
     Quests: [],
-    Vetos: 0,
-    CurrentQuest: {
-        State: "Start", // Start, Players, Veto, Cards, Quest, Success, Fail
-        Leader: -1, // index in players array
-        Quest: -1, // index in quests array
-        Players: [],
-        Vetos: 0,
-        Cards: [],
-        Success: false
-    }
+    Vetos: 0
 };
+var Quest = {
+    State: "Start", // Start, Players, Veto, Cards, Quest, Success, Fail
+    Leader: -1, // index in players array
+    Quest: -1, // index in quests array
+    Players: [],
+    Vetos: 0,
+    Cards: [],
+    Success: false
+}
 
 GameState.Quests = [];
 var p = GameState.Players.length;

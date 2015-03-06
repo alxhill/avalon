@@ -45,7 +45,9 @@ html, body, main {
     height: 100%;
     text-align: center;
     flex-basis: 300px;
-    perspective: 1000;
+    margin: 0 10px;
+    border-radius: 10px;
+
 }
 
 .card-container p {
@@ -119,6 +121,30 @@ html, body, main {
     color: black;
     border-radius: 5px;
     padding: 10px;
+    cursor: pointer;
+}
+
+.veto-picker {
+    font-size: 3.5em;
+}
+
+.veto-picker h3 {
+    margin-bottom: 20px;
+}
+
+.veto-picker .veto-button {
+    padding: 30px;
+    margin: 10px;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.veto-button.veto-reject {
+    background-color: red;
+}
+
+.veto-button.veto-approve {
+    background-color: green;
 }
 
 .board {
@@ -151,7 +177,6 @@ ul.players li {
     display: inline-block;
     font-size: 2.3em;
     margin: 0 15px;
-    transition: 1.6s;
 }
 
 ul.players li.current {
@@ -162,7 +187,7 @@ ul.players li.chosen:not(.current) {
     border-bottom: 2px solid orange;
 }
 
-.quests {
+.board .quests {
   display: flex;
   align-items: center;
   width: 100%;
@@ -171,7 +196,7 @@ ul.players li.chosen:not(.current) {
   align-content: center;
 }
 
-.quest {
+.board .quest {
   display: flex;
   flex: 1;
   flex-direction: column;
@@ -180,35 +205,35 @@ ul.players li.chosen:not(.current) {
   margin: 15px 0;
 }
 
-.quest h3 {
+.board .quest h3 {
     font-family: 'Cinzel', cursive;
     font-size: 3em;
     font-weight: 900;
     text-shadow: 1px 1px 0 black;
 }
 
-.vetos {
+.board .vetos {
     display: inline-block;
     position: absolute;
     bottom: 5px;
     left: 5px;
 }
 
-.vetos img {
+.board .vetos img {
     position: relative;
     zoom: 0.5;
     margin: 0 5px;
 }
 
-.vetos img.current-veto {
+.board .vetos img.current-veto {
     background: red;
 }
 
-.place-container {
+.board .place-container {
     position: relative;
 }
 
-.place-count {
+.board .place-count {
     position: absolute;
     top: 14%;
     left: 32%;

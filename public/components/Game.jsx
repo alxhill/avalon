@@ -1,6 +1,7 @@
 import {Card} from "./Card"
 import {Board} from "./Board"
 import {PlayerPicker} from "./PlayerPicker"
+import {VetoPicker} from "./VetoPicker"
 
 export var Game = React.createClass({
 
@@ -36,6 +37,11 @@ export var Game = React.createClass({
         this.setState({game: this.state.game});
     },
 
+    wait() {
+        this.state.game.CurrentQuest.State = "Waiting";
+        this.setState({game: this.state.game});
+    },
+
     addPlayer(e) {
 
         var players = this.state.game.CurrentQuest.Players;
@@ -57,7 +63,12 @@ export var Game = React.createClass({
         this.setState({game: this.state.game});
     },
 
-    vetoGame() {
+    addVeto() {
+        this.state.game.CurrentQuest.Vetos++;
+        this.wait();
+    },
+
+    vetoQuest() {
 
     },
 
@@ -89,10 +100,11 @@ export var Game = React.createClass({
                                          addPlayer={this.addPlayer}/>
                 break;
             case "Veto":
-                backface = <div><button>Veto</button><br/><button>Approve</button></div>;
+                backface = <VetoPicker approve={this.wait}
+                                       reject={this.addVeto}/>
                 break;
             case "Cards":
-                backface = <p>Choose success/fail or just wait idk</p>;
+                backface = <p>Choose success/fail</p>;
                 break;
         }
 

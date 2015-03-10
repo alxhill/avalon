@@ -154,6 +154,9 @@ html, body, main {
     position: relative;
     height:100%;
 
+    border-radius: 10px;
+    margin: 0 10px;
+
     background: url('images/board.png') local no-repeat;
     background-size: cover;
     /*filter: blur(5px);*/

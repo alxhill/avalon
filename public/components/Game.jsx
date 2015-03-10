@@ -9,12 +9,13 @@ export var Game = React.createClass({
         window.Game = this;
         return {
             game: this.props.gameState,
-            player: this.props.playerState
+            player: this.props.playerState,
+            quest: this.props.currentQuest
         }
     },
 
     startQuest() {
-        var q = this.state.game.CurrentQuest;
+        var q = this.state.quest;
         var newQuest = {
             State:"Start",
             Leader: (q.Leader+1)%(this.state.game.Players.length),
@@ -33,25 +34,24 @@ export var Game = React.createClass({
             newQuest.State = "Waiting";
         }
 
-        this.state.game.CurrentQuest = newQuest;
-        this.setState({game: this.state.game});
+        this.setState({quest: newQuest});
     },
 
     wait() {
-        this.state.game.CurrentQuest.State = "Waiting";
+        this.state.quest.State = "Waiting";
         this.setState({game: this.state.game});
     },
 
     addPlayer(e) {
 
-        var players = this.state.game.CurrentQuest.Players;
+        var players = this.state.quest.Players;
         var player = e.target.innerText;
 
         if (player == this.state.player.Name) return;
 
         if (players.indexOf(player)>=0) {
             players.splice(players.indexOf(player), 1);
-        } else if (players.length < this.state.game.Quests[this.state.game.CurrentQuest.Quest]) {
+        } else if (players.length < this.state.game.Quests[this.state.quest.Quest]) {
             players.push(player);
         }
 
@@ -59,12 +59,12 @@ export var Game = React.createClass({
     },
 
     chooseVeto() {
-        this.state.game.CurrentQuest.State = "Veto";
+        this.state.quest.State = "Veto";
         this.setState({game: this.state.game});
     },
 
     addVeto() {
-        this.state.game.CurrentQuest.Vetos++;
+        this.state.quest.Vetos++;
         this.wait();
     },
 
@@ -73,12 +73,12 @@ export var Game = React.createClass({
     },
 
     chooseCards() {
-        this.state.game.CurrentQuest.State = "Cards";
+        this.state.quest.State = "Cards";
         this.setState({game: this.state.game});
     },
 
     doQuest() {
-        this.state.game.CurrentQuest.State = "Quest";
+        this.state.quest.State = "Quest";
         this.setState({game: this.state.game});
     },
 
@@ -92,10 +92,10 @@ export var Game = React.createClass({
 
     render() {
         var backface = <p>Waiting for other players...</p>;
-        switch (this.state.game.CurrentQuest.State) {
+        switch (this.state.quest.State) {
             case "Players":
                 backface = <PlayerPicker players={this.state.game.Players}
-                                         chosenPlayers={this.state.game.CurrentQuest.Players}
+                                         chosenPlayers={this.state.quest.Players}
                                          submit={this.chooseVeto}
                                          addPlayer={this.addPlayer}/>
                 break;
@@ -112,9 +112,9 @@ export var Game = React.createClass({
             <main>
                 <h1>Avalon</h1>
                 <div className="container">
-                    <Board gameState={this.state.game}/>
+                    <Board gameState={this.state.game} quest={this.state.quest}/>
                     <Card playerState={this.state.player}
-                          flip={["Start","Quest"].indexOf(this.state.game.CurrentQuest.State) < 0}>
+                          flip={["Start","Quest"].indexOf(this.state.quest.State) < 0}>
                         {backface}
                     </Card>
                 </div>

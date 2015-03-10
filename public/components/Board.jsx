@@ -50,8 +50,8 @@ var Board = React.createClass({
             (player, i) => <li
                 key={player}
                 className={cx({
-                    current:i==this.props.gameState.CurrentQuest.Leader,
-                    chosen:this.props.gameState.CurrentQuest.Players.indexOf(player)>=0
+                    current:i==this.props.quest.Leader,
+                    chosen:this.props.quest.Players.indexOf(player)>=0
                 })}>
                     {player}
                 </li>);

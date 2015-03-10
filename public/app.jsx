@@ -1,4 +1,6 @@
 import {Game} from "./components/Game"
+import {App} from "./components/App"
+import {Socket} from "./socket"
 
 var GameState = {
     Players: ["Alex", "James", "Sam", "Andy", "Tom", "Ben"],
@@ -28,11 +30,19 @@ var PlayerState = {
     Mode: "Normal" // can be veto and quest for voting
 };
 
+Socket.init();
+Socket.setUpdateListener(data => console.log('new game state', data));
+
 React.render(
-    <Game gameState={GameState} playerState={PlayerState}/>,
+    <App Socket={Socket}/>,
     document.getElementsByTagName("body")[0]
 );
 
-setTimeout(() => {
-    window.Game.startQuest();
-}, 1000);
+//React.render(
+    //<Game gameState={GameState} playerState={PlayerState} currentQuest={Quest}/>,
+    //document.getElementsByTagName("body")[0]
+//);
+
+//setTimeout(() => {
+    //window.Game.startQuest();
+//}, 1000);

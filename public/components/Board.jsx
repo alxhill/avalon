@@ -35,10 +35,7 @@ var Board = React.createClass({
                     text += "*";
             }
 
-            return (<QuestPlace
-                key={index}
-                text={text}
-                title={title}/>);
+            return <QuestPlace key={index} text={text} title={title}/>;
         });
 
         var vetoList = [];

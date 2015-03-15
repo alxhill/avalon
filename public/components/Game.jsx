@@ -2,16 +2,22 @@ import {Card} from "./Card"
 import {Board} from "./Board"
 import {PlayerPicker} from "./PlayerPicker"
 import {VetoPicker} from "./VetoPicker"
+import {StartGame} from "./StartGame"
 
 export var Game = React.createClass({
 
     getInitialState() {
         window.Game = this;
+        this.props.socket.setUpdateListener(this.updateGameState);
         return {
-            game: this.props.gameState,
-            player: this.props.playerState,
-            quest: this.props.currentQuest
+            game: { State: "Init" },
+            player: {},
+            quest: {}
         }
+    },
+
+    updateGameState(state) {
+        this.setState(state);
     },
 
     startQuest() {
@@ -25,7 +31,6 @@ export var Game = React.createClass({
             Cards: [],
             Success: false
         };
-
 
         if (this.state.game.Players[newQuest.Leader] == this.state.player.Name) {
             newQuest.State = "Players";
@@ -91,6 +96,24 @@ export var Game = React.createClass({
     },
 
     render() {
+        if (this.state.game.State == "Init") {
+            return <StartGame clickStart={this.props.socket.startGame}
+                              clickJoin={this.props.socket.joinGame}/>
+        }
+
+        if (this.state.game.State == "Join") {
+            return (
+                <div>
+                    <h3>Waiting for players...</h3>
+                    <p>{`Game is called ${this.state.game.Name}`}</p>
+                    <ul>
+                        {this.state.game.Players.map(player => <li key={player}>{player}</li>)}
+                    </ul>
+                </div>
+            );
+        }
+
+
         var backface = <p>Waiting for other players...</p>;
         switch (this.state.quest.State) {
             case "Players":

@@ -1,6 +1,6 @@
 var socket = io();
 
-export var Socket = {
+var Socket = {
     // listener should be replaced with setUpdateListener
     listener() {
         console.warn("no update listener set!");
@@ -10,9 +10,15 @@ export var Socket = {
         socket.on('updateState', this.listener);
     },
 
-    startGame(players) {
-        socket.emit('start', players);
-    },
+    startGame: socket.emit.bind(socket, "start"),
+    // startGame(players, gameName, playerName) {
+    //     socket.emit('start', players, gameName, playerName);
+    // },
+
+    joinGame: socket.emit.bind(socket, "join"),
+    // joinGame(gameName, playerName) {
+    //     socket.emit('join', gameName, playerName);
+    // },
 
     setUpdateListener(listener) {
         socket.off('updateState', this.listener);
@@ -21,3 +27,5 @@ export var Socket = {
     }
 
 };
+
+export {Socket};

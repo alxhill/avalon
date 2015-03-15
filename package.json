@@ -19,7 +19,8 @@
   "homepage": "https://github.com/alxhill/avalon",
   "dependencies": {
     "express": "^4.11.2",
-    "socket.io": "^1.3.5"
+    "socket.io": "^1.3.5",
+    "underscore": "^1.8.2"
   },
   "devDependencies": {
     "gulp": "^3.8.11",

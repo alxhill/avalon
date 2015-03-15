@@ -60,7 +60,7 @@ export var Game = React.createClass({
             players.push(player);
         }
 
-        this.setState({game: this.state.game});
+        this.setState({quest: this.state.quest});
     },
 
     chooseVeto() {
@@ -115,20 +115,20 @@ export var Game = React.createClass({
 
 
         var backface = <p>Waiting for other players...</p>;
-        switch (this.state.quest.State) {
-            case "Players":
-                backface = <PlayerPicker players={this.state.game.Players}
-                                         chosenPlayers={this.state.quest.Players}
-                                         submit={this.chooseVeto}
-                                         addPlayer={this.addPlayer}/>
-                break;
-            case "Veto":
-                backface = <VetoPicker approve={this.wait}
-                                       reject={this.addVeto}/>
-                break;
-            case "Cards":
-                backface = <p>Choose success/fail</p>;
-                break;
+        var flip = false;
+        if (this.state.quest.State == "Start" && this.state.game.Players[this.state.quest.Leader] == this.state.player.Name) {
+            flip = true;
+            backface = <PlayerPicker players={this.state.game.Players}
+                                     chosenPlayers={this.state.quest.Players}
+                                     submit={this.chooseVeto}
+                                     addPlayer={this.addPlayer}/>;
+        } else if (this.state.quest.State == "Veto") {
+            flip = true;
+            backface = <VetoPicker approve={this.wait}
+                                   reject={this.addVeto}/>
+        } else if (this.state.quest.State == "Cards") {
+            flip = true
+            backface = <p>Choose success/fail</p>;
         }
 
         return (
@@ -137,7 +137,7 @@ export var Game = React.createClass({
                 <div className="container">
                     <Board gameState={this.state.game} quest={this.state.quest}/>
                     <Card playerState={this.state.player}
-                          flip={["Start","Quest"].indexOf(this.state.quest.State) < 0}>
+                          flip={flip}>
                         {backface}
                     </Card>
                 </div>

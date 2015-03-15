@@ -16,10 +16,13 @@ var server = app.listen(8080, function() {
 
 // these will be replaced with a database
 var gstates = {};
+var quests = {};
 var players = {};
 
 // server-only data
 var _playerIds = {};
+
+var io = socket(server);
 
 function assignCards(gameName) {
     var randomPlayers = _.shuffle(_playerIds[gameName]);
@@ -54,18 +57,55 @@ function assignCards(gameName) {
     });
     var allCards = goodCards.concat(evilCards);
     console.log("cards:", allCards);
-    console.log("players:", _playerIds[gameName]);
-    for (var i = 0; i < _playerIds[gameName].length; i++) {
-        var player = _playerIds[gameName][i];
+    console.log("players:", randomPlayers);
+    var evilNoMordred = [];
+    var evilNoOberon = [];
+    var merlinAndMorgana = [];
+    for (var i = 0; i < randomPlayers.length; i++) {
+        var player = randomPlayers[i];
         var card = allCards[i];
         card.Name = player.Name;
-        var socket = io.sockets.connected[player.ID];
+        if (!card.Good) {
+            if (card.Card != "Mordred")
+                evilNoMordred.push(player.Name);
+            if (card.Card != "Oberon")
+                evilNoOberon.push(player.Name);
+            if (card.Card == "Morgana")
+                merlinAndMorgana.push(player.Name);
+            card.EvilPlayers = evilNoOberon;
+        } else if (card.Card == "Merlin") {
+            card.EvilPlayers = evilNoMordred;
+            merlinAndMorgana.push(player.Name);
+        } else if (card.Card == "Percival") {
+            card.Merlin = merlinAndMorgana;
+        }
         players[gameName][player.Name] = card;
-        socket.emit('updateState', {player:card});
+    }
+
+    // alert clients once all card data has been created
+    for (var i = 0; i < randomPlayers.length; i++) {
+        io.sockets.connected[randomPlayers[i].ID].emit('updateState', {player:allCards[i]});
     }
 }
 
-var io = socket(server);
+function startQuest(gameName) {
+    var q = quests[gameName];
+    var newQuest = {
+        State: "Start",
+        Leader: (q.Leader+1)%(gstates[gameName].PlayerCount),
+        Quest: q.Quest+1,
+        Players: [],
+        Vetos: q.Vetos,
+        Cards: [],
+        Success: false
+    };
+
+    newQuest.Players.push(gstates[gameName].Players[newQuest.Leader]);
+
+    quests[gameName] = newQuest;
+    io.in(gameName).emit("updateState", {quest: newQuest});
+}
+
 io.on('connection', function(client) {
     console.log('new client connection');
     client.on('start', function(players, gameName, playerName, goodCards, evilCards) {
@@ -91,10 +131,11 @@ io.on('connection', function(client) {
 
     client.on('join', function(gameName, playerName) {
         if (gstates[gameName] == null || gstates[gameName].State != "Join" || gstates[gameName].Players.indexOf(playerName) > 0) {
-            console.log("invalid game name " + gameName + " state is not Join or player name '" + playerName + "' is already taken");
+            client.emit("err", "invalid game name " + gameName + " state is not Join or player name '" + playerName + "' is already taken");
             return;
         }
         client.join(gameName);
+        console.log("new user '"+playerName+"' has joined");
         gstates[gameName].Players.push(playerName);
         players[gameName] = {};
         _playerIds[gameName].push({Name:playerName, ID:client.id});
@@ -102,7 +143,7 @@ io.on('connection', function(client) {
         var newState = {game: gstates[gameName]};
         if (gstates[gameName].Players.length == gstates[gameName].PlayerCount) {
             gstates[gameName].State = "Play";
-            newState.quest = {
+            quests[gameName] = {
                 State: "Start", // Start, Players, Veto, Cards, Quest, Success, Fail
                 Leader: -1, // index in players array
                 Quest: -1, // index in quests array
@@ -112,9 +153,10 @@ io.on('connection', function(client) {
                 Success: false
             };
             assignCards(gameName);
+            newState.quest = quests[gameName];
+            // startQuest(gameName);
         }
         io.in(gameName).emit('updateState', newState);
-        console.log('new user has joined');
     });
 
     client.on('disconnect', function() {

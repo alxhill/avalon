@@ -8,6 +8,7 @@ var Socket = {
 
     init() {
         socket.on('updateState', this.listener);
+        socket.on('error', (error => alert(error)));
     },
 
     startGame: socket.emit.bind(socket, "start"),

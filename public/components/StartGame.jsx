@@ -81,6 +81,55 @@ export var StartGame = React.createClass({
                 Success: false
             }
         });
+
+        window.setTimeout(() => Game.setState({
+            quest: {
+                State: "Start",
+                Leader: 0,
+                Quest: 0,
+                Players: ["Alex", "James"],
+                Vetos: 0,
+                VetoCount: 0,
+                Cards: [],
+                Success: false
+            }
+        }), 2000);
+
+        window.setTimeout(() => Game.setState({
+            quest: {
+                State: "Veto",
+                Leader: 0,
+                Quest: 0,
+                Players: ["Alex", "James"],
+                Vetos: 0,
+                VetoCount: 0,
+                Cards: [],
+                Success: false
+            }
+        }), 4000);
+
+        window.setTimeout(() => Game.setState({
+            quest: {
+                State: "Start",
+                Leader: 2,
+                Quest: 0,
+                Players: ["Berrow", "Sam"],
+                Vetos: 0,
+                VetoCount: 0,
+                Cards: [],
+                Success: false
+            },
+            game: {
+                Name: "test",
+                PlayerCount: 5,
+                State: "Play",
+                Players: ["Alex", "James", "Andy", "Sam", "Berrow"],
+                Quests: [true, false, 2, 3, 3],
+                Vetos: 0,
+                GoodCards: ["Merlin"],
+                EvilCards: ["Assassin"]
+            }
+        }), 6000);
     },
 
     render() {

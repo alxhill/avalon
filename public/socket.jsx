@@ -8,18 +8,19 @@ var Socket = {
 
     init() {
         socket.on('updateState', this.listener);
-        socket.on('error', (error => alert(error)));
+        socket.on('err', (error => alert(error)));
+        socket.on('alert', (msg => alert(msg.text)));
     },
 
     startGame: socket.emit.bind(socket, "start"),
-    // startGame(players, gameName, playerName) {
-    //     socket.emit('start', players, gameName, playerName);
-    // },
 
     joinGame: socket.emit.bind(socket, "join"),
-    // joinGame(gameName, playerName) {
-    //     socket.emit('join', gameName, playerName);
-    // },
+
+    startQuest: socket.emit.bind(socket, "startQuest"),
+
+    choosePlayers: socket.emit.bind(socket, "choosePlayers"),
+
+    addVeto: socket.emit.bind(socket, "addVeto"),
 
     setUpdateListener(listener) {
         socket.off('updateState', this.listener);

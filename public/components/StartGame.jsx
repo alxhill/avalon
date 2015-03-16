@@ -51,10 +51,42 @@ export var StartGame = React.createClass({
         this.setState({playerName: evt.target.value});
     },
 
+    // used for debugging
+    demoMode() {
+        Game.setState({
+            game: {
+                Name: "test",
+                PlayerCount: 5,
+                State: "Play",
+                Players: ["Alex", "James", "Andy", "Sam", "Berrow"],
+                Quests: [2, 3, 2, 3, 3],
+                Vetos: 0,
+                GoodCards: ["Merlin"],
+                EvilCards: ["Assassin"]
+            },
+            player: {
+                Name: "Alex",
+                Good: true,
+                Card: "Merlin",
+                Mode: "Normal"
+            },
+            quest: {
+                State: "Start",
+                Leader: -1,
+                Quest: 0,
+                Players: ["Alex", "James"],
+                Vetos: 0,
+                VetoCount: 0,
+                Cards: [],
+                Success: false
+            }
+        });
+    },
+
     render() {
         if (this.state.chooseCards) {
             return (
-                <div>
+                <div className="choose-cards">
                     <h4>Good Cards</h4>
                     <ul>
                         {this.goodCards.map(card => <div>
@@ -95,13 +127,15 @@ export var StartGame = React.createClass({
                     </button>);
             }
             return (
-                <div>
+                <div className="start-game">
                     <input type="text" name="playerName" value={this.state.playerName} onChange={this.updatePlayerName} placeholder="Player Name" />
                     <input type="text" name="gameName" value={this.state.gameName} onChange={this.updateGameName} placeholder="Game Name" />
                     <h2>Start New Game</h2>
                     {buttons}
                     <h2>Join Game</h2>
                     <button type="Submit" onClick={this.clickJoin}>Join Game</button>
+                    <h2>Demo Mode</h2>
+                    <button type="Submit" onClick={this.demoMode}>View Board Demo</button>
                 </div>
             );
         }

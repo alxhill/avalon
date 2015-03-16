@@ -7,16 +7,19 @@ var Card = React.createClass({
 
     render() {
         var cx = React.addons.classSet;
+        var q = this.props.quest;
+        var p = this.props.player;
+
         var extra = null;
-        if (this.props.playerState.EvilPlayers) {
+        if (p.EvilPlayers) {
             extra = <div>
                 <h5>Evil Players</h5>
                 <ul class="evil-list">
-                    {this.props.playerState.EvilPlayers.map(player => <li key={player}>{player}</li>)}
+                    {p.EvilPlayers.map(player => <li key={player}>{player}</li>)}
                 </ul>
             </div>
-        } else if (this.props.playerState.Merlin) {
-            var M = this.props.playerState.Merlin;
+        } else if (p.Merlin) {
+            var M = p.Merlin;
             if (Math.random() < 0.5) {
                 var tmp = M[0];
                 M[0] = M[1];
@@ -27,16 +30,19 @@ var Card = React.createClass({
             else
                 extra = <p>Merlin is either {M[0]} or {M[1]}</p>
         }
+
         return (
-            <div className={cx({"card-container":true, "card-good":this.props.playerState.Good})}>
+            <div className={cx({"card-container":true, "card-good":p.Good})}>
                 <div className={"card" + (this.props.flip ? " flip" : "")}>
                     <div className="card-front">
-                        <p>{`Player Name: ${this.props.playerState.Name}`}</p>
-                        <p>{`Card: ${this.props.playerState.Card}`}</p>
+                        <p>{`Player Name: ${p.Name}`}</p>
+                        <p>{`Card: ${p.Card}`}</p>
                         {extra}
+                        {q.State == "Init" ? <button class="start-quest" onClick={this.props.startQuest}>Start Quest</button> : null}
                     </div>
                     <div className="card-back">
                         {this.props.children}
+                        {extra}
                     </div>
                 </div>
             </div>

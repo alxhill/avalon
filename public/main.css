@@ -6,8 +6,8 @@
 body {
     font-size: 62.5%;
     font-family: 'Junge', serif;
-    background-color: black;
-    color: white;
+    background-color: white;
+    color: rgba(0, 0, 0, 1);
     box-sizing: border-box;
 }
 
@@ -18,10 +18,11 @@ h1, h2, h3, h4, h5, h6 {
 h1 {
     text-align: center;
     vertical-align: middle;
-    font-size: 5em;
+    font-size: 6em;
     letter-spacing: 4px;
     font-weight: 400;
-    height: 10%;
+    height: 11%;
+    text-shadow: 1px 1px 6px gray;
 }
 
 html, body, main {
@@ -29,25 +30,49 @@ html, body, main {
 }
 
 .container {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
     display: flex;
     height: 90%;
-    flex-flow: row wrap-reverse;
-    justify-content: center;
-    align-content: flex-end;
-    align-items: flex-end;
+    -webkit-flex-flow: row wrap-reverse;
+        -ms-flex-flow: row wrap-reverse;
+            flex-flow: row wrap-reverse;
+    -webkit-box-pack: center;
+    -webkit-justify-content: center;
+        -ms-flex-pack: center;
+            justify-content: center;
+    -webkit-align-content: flex-end;
+        -ms-flex-line-pack: end;
+            align-content: flex-end;
+    -webkit-box-align: end;
+    -webkit-align-items: flex-end;
+        -ms-flex-align: end;
+            align-items: flex-end;
 
 }
 
 .card-container {
     position: relative;
     background: red;
-    flex: 1;
-    height: 100%;
+    -webkit-box-flex: 1;
+    -webkit-flex: 1;
+        -ms-flex: 1;
+            flex: 1;
+    height: 90%;
     text-align: center;
-    flex-basis: 300px;
-    margin: 0 10px;
-    border-radius: 10px;
+    -webkit-flex-basis: 300px;
+        -ms-flex-preferred-size: 300px;
 
+    flex-basis: 300px;
+    margin: 0 6%;
+    margin-bottom: 45px;
+    border-radius: 15px;
+
+    box-shadow: 2px 2px 12px grey;
+    color: white;
+    -webkit-perspective: 1000;
+            perspective: 1000;
 }
 
 .card-container p {
@@ -60,12 +85,15 @@ html, body, main {
 }
 
 .card-container .card.flip {
-    transform: rotateY(180deg);
+    -webkit-transform: rotateY(180deg);
+            transform: rotateY(180deg);
 }
 
 .card {
-    transition: 0.6s;
-    transform-style: preserve-3d;
+    -webkit-transition: 0.6s;
+            transition: 0.6s;
+    -webkit-transform-style: preserve-3d;
+            transform-style: preserve-3d;
     position: relative;
 }
 
@@ -75,16 +103,19 @@ html, body, main {
     left: 0;
     width: 100%;
     height: 100%;
-    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
 }
 
 .card-front {
     z-index: 2;
-    transform: rotateY(0deg);
+    -webkit-transform: rotateY(0deg);
+            transform: rotateY(0deg);
 }
 
 .card-back {
-    transform: rotateY(180deg);
+    -webkit-transform: rotateY(180deg);
+            transform: rotateY(180deg);
 }
 
 .player-picker h3 {
@@ -93,24 +124,38 @@ html, body, main {
 }
 
 .player-picker ul {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
     display: flex;
-    flex-wrap: wrap;
-    justify-content: space-around;
+    -webkit-flex-wrap: wrap;
+        -ms-flex-wrap: wrap;
+            flex-wrap: wrap;
+    -webkit-justify-content: space-around;
+        -ms-flex-pack: distribute;
+            justify-content: space-around;
     margin-bottom: 20px;
 }
 
 .player-picker li {
-    transition: 0.6s;
-    flex: 1 120px;
+    -webkit-transition: 0.6s;
+            transition: 0.6s;
+    -webkit-box-flex: 1;
+    -webkit-flex: 1 120px;
+        -ms-flex: 1 120px;
+            flex: 1 120px;
     display: inline-block;
     font-size: 2em;
     margin: 15px;
     padding: 10px 0;
+    cursor: pointer;
 }
 
 .player-picker li.chosen {
     font-size: 2.2em;
-    flex-basis: 150px;
+    -webkit-flex-basis: 150px;
+        -ms-flex-preferred-size: 150px;
+            flex-basis: 150px;
     background: black;
     border-radius: 5px;
 }
@@ -148,18 +193,27 @@ html, body, main {
 }
 
 .board {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
     display: flex;
-    flex: 3;
-    flex-basis: 550px;
+    -webkit-box-flex: 3;
+    -webkit-flex: 3;
+        -ms-flex: 3;
+            flex: 3;
+    -webkit-flex-basis: 550px;
+        -ms-flex-preferred-size: 550px;
+            flex-basis: 550px;
     position: relative;
-    height:100%;
+    height: 90%;
 
-    border-radius: 10px;
-    margin: 0 10px;
+    border-radius: 15px;
 
+    margin: 0 5%;
+    margin-bottom: 45px;
     background: url('images/board.png') local no-repeat;
     background-size: cover;
-    /*filter: blur(5px);*/
+    box-sizing: border-box;
     /*-webkit-filter: blur(5px);*/
     /*-moz-filter: blur(5px);*/
     /*-ms-filter: blur(5px);*/
@@ -168,6 +222,8 @@ html, body, main {
     -webkit-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;
+    box-shadow: 2px 2px 12px grey;
+    color: white;
 }
 
 ul.players {
@@ -191,26 +247,56 @@ ul.players li.chosen:not(.current) {
 }
 
 .board .quests {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
   display: flex;
-  align-items: center;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+      -ms-flex-align: center;
+          align-items: center;
   width: 100%;
-  flex-direction: row;
-  flex-wrap: wrap;
-  align-content: center;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: row;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -webkit-flex-wrap: wrap;
+      -ms-flex-wrap: wrap;
+          flex-wrap: wrap;
+  -webkit-align-content: center;
+      -ms-flex-line-pack: center;
+          align-content: center;
 }
 
 .board .quest {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
   display: flex;
-  flex: 1;
-  flex-direction: column;
-  align-items: center;
-  flex-basis: 200px;
+  -webkit-box-flex: 1;
+  -webkit-flex: 1;
+      -ms-flex: 1;
+          flex: 1;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: column;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-flex-basis: 200px;
+      -ms-flex-preferred-size: 200px;
+
+  flex-basis: 150px;
   margin: 15px 0;
 }
 
 .board .quest h3 {
     font-family: 'Cinzel', cursive;
-    font-size: 3em;
+    font-size: 2.5em;
     font-weight: 900;
     text-shadow: 1px 1px 0 black;
 }
@@ -239,10 +325,18 @@ ul.players li.chosen:not(.current) {
 .board .place-count {
     position: absolute;
     top: 14%;
-    left: 32%;
-    font-size: 8em;
+    left: 28%;
+    font-size: 7em;
     font-family: 'Arvo', serif;
     margin: 0;
     padding: 0;
     text-shadow: -1px -1px 0px rgba(255,255,255,0.3), 1px 1px 0px rgba(0,0,0,0.8);
+}
+
+.start-game {
+    text-align: center;
+}
+
+.place-container img {
+    width: 85%;
 }

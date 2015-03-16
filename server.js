@@ -4,6 +4,9 @@ var socket = require('socket.io');
 var path = require('path');
 var app = express();
 
+
+express.static.mime.default_type = "application/xhtml+xml";
+express.static.mime.define({'application/xhtml+xml': ['.html']});
 app.use(express.static(path.join(__dirname, 'public')));
 
 var server = app.listen(8080, function() {
@@ -68,11 +71,12 @@ function assignCards(gameName) {
         if (!card.Good) {
             if (card.Card != "Mordred")
                 evilNoMordred.push(player.Name);
-            if (card.Card != "Oberon")
+            if (card.Card != "Oberon") {
                 evilNoOberon.push(player.Name);
+                card.EvilPlayers = evilNoOberon;
+            }
             if (card.Card == "Morgana")
                 merlinAndMorgana.push(player.Name);
-            card.EvilPlayers = evilNoOberon;
         } else if (card.Card == "Merlin") {
             card.EvilPlayers = evilNoMordred;
             merlinAndMorgana.push(player.Name);
@@ -88,14 +92,16 @@ function assignCards(gameName) {
     }
 }
 
-function startQuest(gameName) {
+function startQuest(gameName, questIndex) {
     var q = quests[gameName];
+    if (questIndex == null) questIndex = q.Quest+1;
     var newQuest = {
         State: "Start",
         Leader: (q.Leader+1)%(gstates[gameName].PlayerCount),
-        Quest: q.Quest+1,
+        Quest: questIndex,
         Players: [],
         Vetos: q.Vetos,
+        VetoCount: 0,
         Cards: [],
         Success: false
     };
@@ -103,11 +109,17 @@ function startQuest(gameName) {
     newQuest.Players.push(gstates[gameName].Players[newQuest.Leader]);
 
     quests[gameName] = newQuest;
-    io.in(gameName).emit("updateState", {quest: newQuest});
+    updateState(gameName, {quest: newQuest});
+}
+
+function updateState(gameName, state) {
+    io.in(gameName).emit('updateState', state);
 }
 
 io.on('connection', function(client) {
     console.log('new client connection');
+
+
     client.on('start', function(players, gameName, playerName, goodCards, evilCards) {
         console.log('starting new game called ' + gameName + ' with ' + players + ' players');
         var GameState = {
@@ -144,19 +156,46 @@ io.on('connection', function(client) {
         if (gstates[gameName].Players.length == gstates[gameName].PlayerCount) {
             gstates[gameName].State = "Play";
             quests[gameName] = {
-                State: "Start", // Start, Players, Veto, Cards, Quest, Success, Fail
+                State: "Init", // Init, Start, Players, Veto, Cards, Quest, Success, Fail
                 Leader: -1, // index in players array
                 Quest: -1, // index in quests array
                 Players: [],
-                Vetos: 0,
+                Vetos: [],
+                VetoCount: 0,
                 Cards: [],
                 Success: false
             };
             assignCards(gameName);
             newState.quest = quests[gameName];
-            // startQuest(gameName);
         }
-        io.in(gameName).emit('updateState', newState);
+        updateState(gameName, newState);
+    });
+
+    client.on('startQuest', function(gameName, questIndex) {
+        startQuest(gameName, questIndex);
+    });
+
+    client.on('choosePlayers', function(gameName, playerList) {
+        quests[gameName].Players = playerList;
+        quests[gameName].State = "Veto";
+        updateState(gameName, {quest: quests[gameName]});
+    });
+
+    client.on('chooseCards', function(gameName) {
+        quests[gameName].State = "Cards";
+        updateState(gameName, {quest: quests[gameName]});
+    });
+
+    client.on('addVeto', function(gameName, playerName, veto) {
+        console.log("veto from " + playerName + " " + veto, quests[gameName].VetoCount);
+        quests[gameName].VetoCount++;
+        if (veto)
+            quests[gameName].Vetos.push(playerName);
+        console.log("vetocount",quests[gameName].VetoCount, gstates[gameName].PlayerCount);
+        if (quests[gameName].VetoCount === gstates[gameName].PlayerCount) {
+            console.log("updating state of children");
+            updateState(gameName, {quest:quests[gameName]});
+        }
     });
 
     client.on('disconnect', function() {

@@ -22,9 +22,9 @@ var QuestPlace = React.createClass({
 
 var Board = React.createClass({
     render() {
-        var p = this.props.gameState.Players.length;
+        var p = this.props.game.Players.length;
         // mathsy magic to figure out the number of players in each quest
-        var questList = this.props.gameState.Quests.map((quest, index) => {
+        var questList = this.props.game.Quests.map((quest, index) => {
             var text, title = "Quest " + (index + 1);
 
             if (typeof quest == "boolean") {
@@ -40,10 +40,10 @@ var Board = React.createClass({
 
         var vetoList = [];
         for (var i=0; i < 5; i++) {
-            vetoList.push(<img key={i} src="images/board_small_circle.png" className={cx({'current-veto':i < this.props.gameState.Vetos})}/>);
+            vetoList.push(<img key={i} src="images/board_small_circle.png" className={cx({'current-veto':i < this.props.game.Vetos})}/>);
         }
 
-        var playerList = this.props.gameState.Players.map(
+        var playerList = this.props.game.Players.map(
             (player, i) => <li
                 key={player}
                 className={cx({

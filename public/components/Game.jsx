@@ -20,26 +20,9 @@ export var Game = React.createClass({
         this.setState(state);
     },
 
-    startQuest() {
-        var q = this.state.quest;
-        var newQuest = {
-            State:"Start",
-            Leader: (q.Leader+1)%(this.state.game.Players.length),
-            Quest: q.Quest+1,
-            Players: [],
-            Vetos: q.Vetos,
-            Cards: [],
-            Success: false
-        };
-
-        if (this.state.game.Players[newQuest.Leader] == this.state.player.Name) {
-            newQuest.State = "Players";
-            newQuest.Players.push(this.state.player.Name);
-        } else {
-            newQuest.State = "Waiting";
-        }
-
-        this.setState({quest: newQuest});
+    startQuest(index) {
+        console.log(index);
+        this.props.socket.startQuest(this.state.game.Name, index);
     },
 
     wait() {
@@ -63,36 +46,22 @@ export var Game = React.createClass({
         this.setState({quest: this.state.quest});
     },
 
-    chooseVeto() {
-        this.state.quest.State = "Veto";
-        this.setState({game: this.state.game});
+    choosePlayers() {
+        this.props.socket.choosePlayers(this.state.game.Name, this.state.quest.Players);
     },
 
-    addVeto() {
-        this.state.quest.Vetos++;
+    addVeto(veto) {
+        this.props.socket.addVeto(this.state.game.Name, this.state.player.Name, veto);
         this.wait();
     },
 
-    vetoQuest() {
-
-    },
-
     chooseCards() {
-        this.state.quest.State = "Cards";
-        this.setState({game: this.state.game});
+        this.props.socket.chooseCards();
     },
 
     doQuest() {
         this.state.quest.State = "Quest";
         this.setState({game: this.state.game});
-    },
-
-    questSuccess() {
-
-    },
-
-    questFail() {
-
     },
 
     render() {
@@ -120,13 +89,28 @@ export var Game = React.createClass({
             flip = true;
             backface = <PlayerPicker players={this.state.game.Players}
                                      chosenPlayers={this.state.quest.Players}
-                                     submit={this.chooseVeto}
+                                     submit={this.choosePlayers}
                                      addPlayer={this.addPlayer}/>;
         } else if (this.state.quest.State == "Veto") {
             flip = true;
-            backface = <VetoPicker approve={this.wait}
-                                   reject={this.addVeto}/>
-        } else if (this.state.quest.State == "Cards") {
+            if (this.state.quest.VetoCount < this.state.game.PlayerCount) {
+                backface = <VetoPicker approve={this.addVeto.bind(this, false)}
+                                       reject={this.addVeto.bind(this, true)}/>
+            } else {
+                var success = this.state.quest.Vetos.length/2 <= this.state.game.PlayerCount;
+                if (success) {
+                    backface = <div>
+                        <p>{this.state.quest.Vetos.join(", ")} rejected the round. {this.state.quest.Players.join(",")} will be going on a quest.</p>
+                        <button onClick={this.chooseCards}>Start Quest</button>
+                    </div>
+                } else {
+                    backface = <div>
+                        <p>{this.state.quest.Vetos.join(", ")} have vetoed the round.</p>
+                        <button onClick={this.startQuest.bind(this, this.state.quest.Quest)}>Continue</button>
+                    </div>
+                }
+            }
+        } else if (this.state.quest.State == "Cards" && this.state.quest.Players.indexOf(this.state.player.Name) >= 0) {
             flip = true
             backface = <p>Choose success/fail</p>;
         }
@@ -135,8 +119,10 @@ export var Game = React.createClass({
             <main>
                 <h1>Avalon</h1>
                 <div className="container">
-                    <Board gameState={this.state.game} quest={this.state.quest}/>
-                    <Card playerState={this.state.player}
+                    <Board game={this.state.game} quest={this.state.quest}/>
+                    <Card player={this.state.player}
+                          quest={this.state.quest}
+                          startQuest={this.startQuest}
                           flip={flip}>
                         {backface}
                     </Card>

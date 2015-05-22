@@ -169,6 +169,7 @@ export var StartGame = React.createClass({
             var buttons = [];
             for (var i = 5; i <= 10; i++) {
                 buttons.push(<button
+                        className="player-button"
                         onClick={evt => this.setState({playerCount:parseInt(evt.target.value), chooseCards:true})}
                         value={i}
                         key={i}>
@@ -177,10 +178,14 @@ export var StartGame = React.createClass({
             }
             return (
                 <div className="start-game">
-                    <input type="text" name="playerName" value={this.state.playerName} onChange={this.updatePlayerName} placeholder="Player Name" />
-                    <input type="text" name="gameName" value={this.state.gameName} onChange={this.updateGameName} placeholder="Game Name" />
-                    <h2>Start New Game</h2>
-                    {buttons}
+                    <h1 className="large">AvalONLINE</h1>
+                    <div className="start-inputs">
+                        <input type="text" name="playerName" value={this.state.playerName} onChange={this.updatePlayerName} placeholder="Player Name" />
+                        <input type="text" name="gameName" value={this.state.gameName} onChange={this.updateGameName} placeholder="Game Name" />
+                    </div>
+                    <div className="below">
+                        {buttons}
+                    </div>
                     <h2>Join Game</h2>
                     <button type="Submit" onClick={this.clickJoin}>Join Game</button>
                     <h2>Demo Mode</h2>

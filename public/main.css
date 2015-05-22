@@ -22,7 +22,12 @@ h1 {
     letter-spacing: 4px;
     font-weight: 400;
     height: 11%;
-    text-shadow: 1px 1px 6px gray;
+    text-shadow: 1px 1px 6px grey;
+    color: black;
+}
+
+h1.large {
+    padding: 3.5em 0;
 }
 
 html, body, main {
@@ -49,12 +54,10 @@ html, body, main {
     -webkit-align-items: flex-end;
         -ms-flex-align: end;
             align-items: flex-end;
-
 }
 
 .card-container {
     position: relative;
-    background: red;
     -webkit-box-flex: 1;
     -webkit-flex: 1;
         -ms-flex: 1;
@@ -67,9 +70,7 @@ html, body, main {
     flex-basis: 300px;
     margin: 0 6%;
     margin-bottom: 45px;
-    border-radius: 15px;
 
-    box-shadow: 2px 2px 12px grey;
     color: white;
     -webkit-perspective: 1000;
             perspective: 1000;
@@ -78,10 +79,12 @@ html, body, main {
 .card-container p {
     font-size: 4em;
     margin-top: 20px;
+    text-shadow: 2px 2px 0 black;
 }
 
-.card-good {
-    background: blue;
+.card-good .card-front {
+    background-image: url("images/good.png");
+    max-height: 100%;
 }
 
 .card-container .card.flip {
@@ -95,9 +98,14 @@ html, body, main {
     -webkit-transform-style: preserve-3d;
             transform-style: preserve-3d;
     position: relative;
+
+    height: 100%;
 }
 
 .card-front, .card-back {
+    background-size: 100%;
+    background-repeat: no-repeat;
+    background-color:black;
     position: absolute;
     top: 0;
     left: 0;
@@ -105,15 +113,19 @@ html, body, main {
     height: 100%;
     -webkit-backface-visibility: hidden;
             backface-visibility: hidden;
+    border-radius: 15px;
+    box-shadow: 2px 2px 12px grey;
 }
 
 .card-front {
+    background-image: url("images/evil.png");
     z-index: 2;
     -webkit-transform: rotateY(0deg);
             transform: rotateY(0deg);
 }
 
 .card-back {
+    z-index: 2;
     -webkit-transform: rotateY(180deg);
             transform: rotateY(180deg);
 }
@@ -335,6 +347,65 @@ ul.players li.chosen:not(.current) {
 
 .start-game {
     text-align: center;
+}
+
+.start-game .below {
+    display: block;
+}
+
+.start-inputs {
+    text-align: center;
+    margin: 10px;
+}
+
+.start-inputs input {
+    margin: 0.3em;
+    font-family: 'Cinzel';
+    margin-bottom: 2em;
+    font-size: 18px;
+    appearance: none;
+    box-shadow: none;
+    border-radius: none;
+    padding: 10px;
+    border: none;
+    border-bottom: solid 2px #969696;
+    font-weight: bold;
+    transition: border 0.3s;
+}
+
+.start-inputs input:focus {
+    border-bottom: solid 2px black;
+    outline: none;
+}
+
+.player-button {
+    font-family: 'Cinzel';
+    font-weight: bold;
+	-moz-box-shadow: 2px 2px 0px 0px #969696;
+	-webkit-box-shadow: 2px 2px 0px 0px #969696;
+	box-shadow: 2px 2px 0px 0px #969696;
+	transition: all 0.2s;
+	background-color:transparent;
+	-moz-border-radius:8px;
+	-webkit-border-radius:8px;
+	border-radius:8px;
+	border:2px solid #ffffff;
+	display:inline-block;
+	cursor:pointer;
+	color:#969696;
+	font-size:18px;
+	font-weight:bold;
+	padding:10px 19px;
+	text-decoration:none;
+	margin: 5px;
+}
+.player-button:hover {
+	background-color:transparent;
+	color: black;
+}
+.player-button:active {
+	position:relative;
+	top:1px;
 }
 
 .place-container img {

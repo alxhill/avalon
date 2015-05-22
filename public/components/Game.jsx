@@ -21,7 +21,6 @@ export var Game = React.createClass({
     },
 
     startQuest(index) {
-        console.log(index);
         this.props.socket.startQuest(this.state.game.Name, index);
     },
 
@@ -97,7 +96,7 @@ export var Game = React.createClass({
                 backface = <VetoPicker approve={this.addVeto.bind(this, false)}
                                        reject={this.addVeto.bind(this, true)}/>
             } else {
-                var success = this.state.quest.Vetos.length/2 <= this.state.game.PlayerCount;
+                var success = this.state.quest.Vetos.length <= this.state.game.PlayerCount/2;
                 if (success) {
                     backface = <div>
                         <p>{this.state.quest.Vetos.join(", ")} rejected the round. {this.state.quest.Players.join(",")} will be going on a quest.</p>

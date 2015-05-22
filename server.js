@@ -4,9 +4,6 @@ var socket = require('socket.io');
 var path = require('path');
 var app = express();
 
-
-express.static.mime.default_type = "application/xhtml+xml";
-express.static.mime.define({'application/xhtml+xml': ['.html']});
 app.use(express.static(path.join(__dirname, 'public')));
 
 var server = app.listen(8080, function() {
@@ -119,7 +116,6 @@ function updateState(gameName, state) {
 io.on('connection', function(client) {
     console.log('new client connection');
 
-
     client.on('start', function(players, gameName, playerName, goodCards, evilCards) {
         console.log('starting new game called ' + gameName + ' with ' + players + ' players');
         var GameState = {
@@ -172,6 +168,7 @@ io.on('connection', function(client) {
     });
 
     client.on('startQuest', function(gameName, questIndex) {
+        console.log("STARTING QUEST OOH YAH");
         startQuest(gameName, questIndex);
     });
 

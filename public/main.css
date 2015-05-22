@@ -68,23 +68,22 @@ html, body, main {
         -ms-flex-preferred-size: 300px;
 
     flex-basis: 300px;
-    margin: 0 6%;
+    margin: 0 5%;
     margin-bottom: 45px;
 
     color: white;
     -webkit-perspective: 1000;
             perspective: 1000;
+    text-shadow: 2px 2px 0 black;
 }
 
 .card-container p {
     font-size: 4em;
     margin-top: 20px;
-    text-shadow: 2px 2px 0 black;
 }
 
 .card-good .card-front {
     background-image: url("images/good.png");
-    max-height: 100%;
 }
 
 .card-container .card.flip {
@@ -103,9 +102,10 @@ html, body, main {
 }
 
 .card-front, .card-back {
-    background-size: 100%;
+    background-size: cover;
     background-repeat: no-repeat;
     background-color:black;
+    background-position: 50% 0;
     position: absolute;
     top: 0;
     left: 0;
@@ -125,9 +125,45 @@ html, body, main {
 }
 
 .card-back {
+    background-image: url("images/back.png");
     z-index: 2;
     -webkit-transform: rotateY(180deg);
             transform: rotateY(180deg);
+}
+
+.card .evil-list {
+    position: absolute;
+    bottom: 10px;
+    font-size: 2em;
+    text-align: center;
+    width: 100%;
+}
+
+.card-picker h3 {
+    font-size: 4em;
+    margin: 20px;
+}
+
+.card-picker .quest-card {
+    padding: 30px;
+    margin: 10px;
+    border-radius: 10px;
+    cursor: pointer;
+    width: 45%;
+    display: inline-block;
+    box-sizing: border-box;
+    background-size: cover;
+    height: 33em;
+    box-shadow: 3px 4px 3px rgba(1,1,1,0.7);
+    min-width: 200px;
+}
+
+.quest-card-success {
+    background-image: url("images/success.png");
+}
+
+.quest-card-fail {
+    background-image: url("images/fail.png");
 }
 
 .player-picker h3 {
@@ -179,6 +215,7 @@ html, body, main {
     border-radius: 5px;
     padding: 10px;
     cursor: pointer;
+    text-shadow: none;
 }
 
 .veto-picker {
@@ -187,6 +224,8 @@ html, body, main {
 
 .veto-picker h3 {
     margin-bottom: 20px;
+    /* position: absolute; */
+    /* top: 10px; */
 }
 
 .veto-picker .veto-button {
@@ -194,14 +233,21 @@ html, body, main {
     margin: 10px;
     border-radius: 10px;
     cursor: pointer;
+    width: 45%;
+    display: inline-block;
+    box-sizing: border-box;
+    background-size: cover;
+    height: 8em;
+    box-shadow: 3px 4px 3px rgba(1,1,1,0.7);
+    min-width: 200px;
 }
 
 .veto-button.veto-reject {
-    background-color: red;
+    background-image: url("images/reject.png");
 }
 
 .veto-button.veto-approve {
-    background-color: green;
+    background-image: url("images/approve.png");
 }
 
 .board {
@@ -378,32 +424,39 @@ ul.players li.chosen:not(.current) {
     outline: none;
 }
 
-.player-button {
+button {
     font-family: 'Cinzel';
     font-weight: bold;
-	-moz-box-shadow: 2px 2px 0px 0px #969696;
-	-webkit-box-shadow: 2px 2px 0px 0px #969696;
-	box-shadow: 2px 2px 0px 0px #969696;
+	-moz-box-shadow: 1px 1px 0px 0px black;
+	-webkit-box-shadow: 1px 1px 0px 0px black;
+	box-shadow: 1px 1px 0px 0px black;
 	transition: all 0.2s;
-	background-color:transparent;
+	background-color:white;
 	-moz-border-radius:8px;
 	-webkit-border-radius:8px;
 	border-radius:8px;
 	border:2px solid #ffffff;
 	display:inline-block;
 	cursor:pointer;
-	color:#969696;
+	color:black;
 	font-size:18px;
 	font-weight:bold;
 	padding:10px 19px;
 	text-decoration:none;
 	margin: 5px;
 }
-.player-button:hover {
-	background-color:transparent;
-	color: black;
+
+.player-button {
+	-moz-box-shadow: 1px 1px 0px 0px black;
+	-webkit-box-shadow: 2px 2px 0px 0px black;
+	box-shadow: 2px 2px 0px 0px black;
 }
-.player-button:active {
+
+button:hover {
+	color: black;
+
+}
+button:active {
 	position:relative;
 	top:1px;
 }

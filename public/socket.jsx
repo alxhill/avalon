@@ -20,6 +20,10 @@ var Socket = {
 
     choosePlayers: socket.emit.bind(socket, "choosePlayers"),
 
+    chooseCards: socket.emit.bind(socket, "chooseCards"),
+
+    pickCard: socket.emit.bind(socket, "pickCard"),
+
     addVeto: socket.emit.bind(socket, "addVeto"),
 
     setUpdateListener(listener) {

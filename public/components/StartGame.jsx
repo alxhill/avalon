@@ -68,7 +68,8 @@ export var StartGame = React.createClass({
                 Name: "Alex",
                 Good: true,
                 Card: "Merlin",
-                Mode: "Normal"
+                Mode: "Normal",
+                EvilPlayers: ["James", "Andy"]
             },
             quest: {
                 State: "Start",
@@ -108,6 +109,20 @@ export var StartGame = React.createClass({
             }
         }), 4000);
 
+
+        window.setTimeout(() => Game.setState({
+            quest: {
+                State: "Cards",
+                Leader: 0,
+                Players: ["Alex", "James"],
+                Vetos: 0,
+                VetoCount: 0,
+                Cards: [],
+                Success: false
+            }
+        }), 6000);
+        return;
+
         window.setTimeout(() => Game.setState({
             quest: {
                 State: "Start",
@@ -129,7 +144,7 @@ export var StartGame = React.createClass({
                 GoodCards: ["Merlin"],
                 EvilCards: ["Assassin"]
             }
-        }), 6000);
+        }), 8000);
     },
 
     render() {

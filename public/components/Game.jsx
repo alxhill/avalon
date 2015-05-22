@@ -2,6 +2,7 @@ import {Card} from "./Card"
 import {Board} from "./Board"
 import {PlayerPicker} from "./PlayerPicker"
 import {VetoPicker} from "./VetoPicker"
+import {CardPicker} from "./CardPicker"
 import {StartGame} from "./StartGame"
 
 export var Game = React.createClass({
@@ -17,6 +18,7 @@ export var Game = React.createClass({
     },
 
     updateGameState(state) {
+        console.log("Updating game state", state);
         this.setState(state);
     },
 
@@ -55,12 +57,16 @@ export var Game = React.createClass({
     },
 
     chooseCards() {
-        this.props.socket.chooseCards();
+        this.props.socket.chooseCards(this.state.game.Name);
+    },
+
+    pickCard(isSuccess) {
+        this.props.socket.pickCard(this.state.game.Name, this.state.player.Name, isSuccess);
     },
 
     doQuest() {
         this.state.quest.State = "Quest";
-        this.setState({game: this.state.game});
+        this.setState({quest: this.state.quest});
     },
 
     render() {
@@ -84,34 +90,59 @@ export var Game = React.createClass({
 
         var backface = <p>Waiting for other players...</p>;
         var flip = false;
-        if (this.state.quest.State == "Start" && this.state.game.Players[this.state.quest.Leader] == this.state.player.Name) {
-            flip = true;
-            backface = <PlayerPicker players={this.state.game.Players}
-                                     chosenPlayers={this.state.quest.Players}
-                                     submit={this.choosePlayers}
-                                     addPlayer={this.addPlayer}/>;
-        } else if (this.state.quest.State == "Veto") {
-            flip = true;
-            if (this.state.quest.VetoCount < this.state.game.PlayerCount) {
-                backface = <VetoPicker approve={this.addVeto.bind(this, false)}
-                                       reject={this.addVeto.bind(this, true)}/>
-            } else {
-                var success = this.state.quest.Vetos.length <= this.state.game.PlayerCount/2;
-                if (success) {
-                    backface = <div>
-                        <p>{this.state.quest.Vetos.join(", ")} rejected the round. {this.state.quest.Players.join(",")} will be going on a quest.</p>
-                        <button onClick={this.chooseCards}>Start Quest</button>
-                    </div>
-                } else {
-                    backface = <div>
-                        <p>{this.state.quest.Vetos.join(", ")} have vetoed the round.</p>
-                        <button onClick={this.startQuest.bind(this, this.state.quest.Quest)}>Continue</button>
-                    </div>
+        switch (this.state.quest.State) {
+            case "Start":
+                if (this.state.game.Players[this.state.quest.Leader] == this.state.player.Name) {
+                    flip = true;
+                    backface = <PlayerPicker players={this.state.game.Players}
+                                             chosenPlayers={this.state.quest.Players}
+                                             submit={this.choosePlayers}
+                                             addPlayer={this.addPlayer}/>;
                 }
-            }
-        } else if (this.state.quest.State == "Cards" && this.state.quest.Players.indexOf(this.state.player.Name) >= 0) {
-            flip = true
-            backface = <p>Choose success/fail</p>;
+                break;
+            case "Veto":
+                flip = true;
+                if (this.state.quest.VetoCount < this.state.game.PlayerCount) {
+                    backface = <VetoPicker approve={this.addVeto.bind(this, false)}
+                                           reject={this.addVeto.bind(this, true)}/>
+                } else {
+                    var success = this.state.quest.Vetos.length <= this.state.game.PlayerCount/2;
+                    if (success) {
+                        var rejected = this.state.quest.Vetos.length > 0 ? this.state.quest.Vetos.join(", ") : "No one";
+                        backface = <div>
+                            <p>{rejected} rejected the round. {this.state.quest.Players.join(", ")} will be going on a quest.</p>
+                            {this.state.quest.Players.indexOf(this.state.player.Name) >= 0 ?
+                                <button onClick={this.chooseCards}>Go On Quest!</button> :
+                                <p>Waiting for players to finish quest...</p>}
+                        </div>
+                    } else {
+                        backface = <div>
+                            <p>{this.state.quest.Vetos.join(", ")} have vetoed the round.</p>
+                            <button onClick={this.startQuest.bind(this, this.state.quest.Quest)}>Continue</button>
+                        </div>
+                    }
+                }
+                break;
+            case "Cards":
+                if (this.state.quest.Players.indexOf(this.state.player.Name) >= 0) {
+                    flip = true;
+                    backface = <CardPicker isGood={this.state.player.Good} pickCard={this.pickCard}/>;
+                } else {
+                    flip = false;
+                }
+                break;
+            case "End":
+                flip = true;
+                var top;
+                if (this.state.quest.Success)
+                    top = <p>Quest Succeeded! The cards were: {this.state.quest.Cards.map((card)=> card ? "Success" : "Fail").join(", ")}</p>;
+                else
+                    top = <p>Quest Failed! The cards were: {this.state.quest.Cards.map((card)=> card ? "Success" : "Fail").join(", ")}</p>;
+                backface = <div className="end-quest">
+                    {top}
+                    <button onClick={()=> {this.state.quest.State = "Init"; this.setState({quest: this.state.quest});}}>Continue</button>
+                </div>
+                break;
         }
 
         return (

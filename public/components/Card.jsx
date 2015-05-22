@@ -12,7 +12,7 @@ var Card = React.createClass({
 
         var extra = null;
         if (p.EvilPlayers) {
-            extra = <p class="evil-list">Evil Players: {p.EvilPlayer.join(",")}</p>
+            extra = <p className="evil-list">Evil Players: {p.EvilPlayers.join(",")}</p>
         } else if (p.Merlin) {
             var M = p.Merlin;
             if (Math.random() < 0.5) {
@@ -33,7 +33,7 @@ var Card = React.createClass({
                         <p>{`Player Name: ${p.Name}`}</p>
                         <p>{`Card: ${p.Card}`}</p>
                         {extra}
-                        {q.State == "Init" ? <button class="start-quest" onClick={() => this.props.startQuest()}>Start Quest</button> : null}
+                        {q.State == "Init" ? <button className="start-quest" onClick={() => this.props.startQuest()}>Start Quest</button> : null}
                     </div>
                     <div className="card-back">
                         {this.props.children}

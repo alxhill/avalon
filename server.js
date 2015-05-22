@@ -178,9 +178,22 @@ io.on('connection', function(client) {
         updateState(gameName, {quest: quests[gameName]});
     });
 
-    client.on('chooseCards', function(gameName) {
+    client.on('chooseCards', function(gameName, playerName) {
         quests[gameName].State = "Cards";
         updateState(gameName, {quest: quests[gameName]});
+    });
+
+    client.on('pickCard', function(gameName, playerName, isSuccess) {
+        quests[gameName].Cards.push(isSuccess);
+        quests[gameName].Players[quests[gameName].Players.indexOf(playerName)] = true;
+        if (quests[gameName].Cards.length == quests[gameName].Players.length) {
+            var success = _.all(quests[gameName].Cards,_.identity);
+            quests[gameName].State = "End";
+            quests[gameName].Success = success;
+            quests[gameName].Cards = _.shuffle(quests[gameName].Cards);
+            gstates[gameName].Quests[quests[gameName].Quest] = success;
+        }
+        updateState(gameName, {quest: quests[gameName], game: gstates[gameName]});
     });
 
     client.on('addVeto', function(gameName, playerName, veto) {

@@ -14,16 +14,18 @@ var Card = React.createClass({
         if (p.EvilPlayers) {
             extra = <p className="evil-list">Evil Players: {p.EvilPlayers.join(",")}</p>
         } else if (p.Merlin) {
-            var M = p.Merlin;
-            if (Math.random() < 0.5) {
-                var tmp = M[0];
-                M[0] = M[1];
-                M[1] = tmp;
-            }
             if (M.length == 1)
                 extra = <p>{M[0]} is Merlin</p>
-            else
+            else {
+                var M = p.Merlin;
+                if (Math.random() < 0.5) {
+                    var tmp = M[0];
+                    M[0] = M[1];
+                    M[1] = tmp;
+                }
                 extra = <p>Merlin is either {M[0]} or {M[1]}</p>
+            }
+
         }
 
         return (

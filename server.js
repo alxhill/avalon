@@ -168,7 +168,6 @@ io.on('connection', function(client) {
     });
 
     client.on('startQuest', function(gameName, questIndex) {
-        console.log("STARTING QUEST OOH YAH");
         startQuest(gameName, questIndex);
     });
 

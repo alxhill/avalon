@@ -1,7 +1,7 @@
 export var StartGame = React.createClass({
 
-    goodCards: ["Merlin","Percival"],
-    evilCards: ["Assassin", "Oberon", "Mordred", "Morgana"],
+    goodCards: [["Merlin", "Knows evil players"],["Percival", "Knows the identity of Merlin"]],
+    evilCards: [["Assassin","Must identify Merlin"], ["Oberon","Unknown to evil"], ["Mordred","Unknown to Merlin"], ["Morgana","Appears as Merlin"]],
 
     getInitialState() {
         return {
@@ -121,7 +121,6 @@ export var StartGame = React.createClass({
                 Success: false
             }
         }), 6000);
-        return;
 
         window.setTimeout(() => Game.setState({
             quest: {
@@ -145,6 +144,8 @@ export var StartGame = React.createClass({
                 EvilCards: ["Assassin"]
             }
         }), 8000);
+
+        window.setTimeout(this.demoMode, 10000);
     },
 
     render() {
@@ -153,28 +154,30 @@ export var StartGame = React.createClass({
                 <div className="choose-cards">
                     <h4>Good Cards</h4>
                     <ul>
-                        {this.goodCards.map(card => <div>
+                        {this.goodCards.map(card => <label style={{'display':'block'}}>
                             <input
                                 type="checkbox"
-                                checked={this.state.goodCardList.indexOf(card)>=0}
-                                name={card}
+                                checked={this.state.goodCardList.indexOf(card[0])>=0}
+                                id={card[0]}
+                                name={card[0]}
                                 onChange={this.toggleCard.bind(this, "good")}
                                 />
-                            <label htmlFor={card}>{card}</label>
-                        </div>
+                            {card[0]} - {card[1]}
+                        </label>
                         )}
                     </ul>
                     <h4>Evil Cards</h4>
                     <ul>
-                        {this.evilCards.map(card => <div>
-                            <input
-                                type="checkbox"
-                                checked={this.state.evilCardList.indexOf(card)>=0}
-                                name={card}
-                                onChange={this.toggleCard.bind(this, "evil")}
-                                />
-                            <label htmlFor={card}>{card}</label>
-                        </div>
+                        {this.evilCards.map(card => <label style={{'display':'block'}}>
+                                <input
+                                    type="checkbox"
+                                    checked={this.state.evilCardList.indexOf(card[0])>=0}
+                                    id={card[0]}
+                                    name={card[0]}
+                                    onChange={this.toggleCard.bind(this, "evil")}
+                                    />
+                                {card[0]} - {card[1]}
+                            </label>
                         )}
                     </ul>
                     <button type="Submit" onClick={this.clickStart}>Start Game</button>

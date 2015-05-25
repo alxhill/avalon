@@ -64,11 +64,6 @@ export var Game = React.createClass({
         this.props.socket.pickCard(this.state.game.Name, this.state.player.Name, isSuccess);
     },
 
-    doQuest() {
-        this.state.quest.State = "Quest";
-        this.setState({quest: this.state.quest});
-    },
-
     render() {
         if (this.state.game.State == "Init") {
             return <StartGame clickStart={this.props.socket.startGame}
@@ -77,7 +72,7 @@ export var Game = React.createClass({
 
         if (this.state.game.State == "Join") {
             return (
-                <div>
+                <div className="join">
                     <h3>Waiting for players...</h3>
                     <p>{`Game is called ${this.state.game.Name}`}</p>
                     <ul>

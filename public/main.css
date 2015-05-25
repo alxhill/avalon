@@ -374,6 +374,7 @@ ul.players li.chosen:not(.current) {
 
 .board .vetos img.current-veto {
     background: red;
+    border-radius: 50%;
 }
 
 .board .place-container {
@@ -463,4 +464,48 @@ button:active {
 
 .place-container img {
     width: 130px;
+}
+
+
+.choose-cards {
+    margin: 0 auto;
+    width: 400px;
+    text-align: center;
+    margin-top: 6em;
+    font-size: 2em;
+}
+
+.choose-cards h4 {
+    font-family: Cinzel;
+    padding-top: 2em;
+    border-bottom: 2px solid black;
+    margin-bottom: 0.6em;
+    display: inline-block;
+}
+
+.choose-cards ul li {
+    padding: 10px;
+}
+
+
+.choose-cards ul {
+    text-align: left;
+    margin: 8px;
+}
+
+
+.join {
+    text-align: center;
+    padding: 3em;
+    font-size: 3em;
+}
+
+.join h3 {
+    font-family: Cinzel;
+    /* font-size: 3em; */
+    padding: 1em;
+}
+
+.join ul {
+    list-style: none;
 }

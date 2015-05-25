@@ -14,7 +14,6 @@ var server = app.listen(8080, function() {
 
 });
 
-// these will be replaced with a database
 var gstates = {};
 var quests = {};
 var players = {};
@@ -30,14 +29,12 @@ function assignCards(gameName) {
         return {
             Good: true,
             Card: cardName,
-            Mode: "Normal"
         };
     });
     var evilCards = _.clone(gstates[gameName].EvilCards).map(function(cardName) {
         return {
             Good: false,
             Card: cardName,
-            Mode: "Normal"
         }
     });
 
@@ -97,7 +94,7 @@ function startQuest(gameName, questIndex) {
         Leader: (q.Leader+1)%(gstates[gameName].PlayerCount),
         Quest: questIndex,
         Players: [],
-        Vetos: q.Vetos,
+        Vetos: [],
         VetoCount: 0,
         Cards: [],
         Success: false
@@ -203,7 +200,9 @@ io.on('connection', function(client) {
         console.log("vetocount",quests[gameName].VetoCount, gstates[gameName].PlayerCount);
         if (quests[gameName].VetoCount === gstates[gameName].PlayerCount) {
             console.log("updating state of children");
-            updateState(gameName, {quest:quests[gameName]});
+            if (quests[gameName].Vetos.length > gstates[gameName].PlayerCount/2)
+                gstates[gameName].Vetos++;
+            updateState(gameName, {quest:quests[gameName], game: gstates[gameName]});
         }
     });
 

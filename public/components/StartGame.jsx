@@ -196,7 +196,7 @@ export var StartGame = React.createClass({
             }
             return (
                 <div className="start-game">
-                    <h1 className="large">AvalONLINE</h1>
+                    <h1 className="large"><img src="images/logo.png"/></h1>
                     <div className="start-inputs">
                         <input type="text" name="playerName" value={this.state.playerName} onChange={this.updatePlayerName} placeholder="Player Name" />
                         <input type="text" name="gameName" value={this.state.gameName} onChange={this.updateGameName} placeholder="Game Name" />

@@ -24,6 +24,7 @@ h1 {
     height: 11%;
     text-shadow: 1px 1px 6px grey;
     color: black;
+    height: 11%;
 }
 
 h1.large {
@@ -508,4 +509,8 @@ button:active {
 
 .join ul {
     list-style: none;
+}
+
+h1 img {
+    height: 80px;
 }

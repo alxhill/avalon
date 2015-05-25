@@ -8,6 +8,7 @@ import {StartGame} from "./StartGame"
 export var Game = React.createClass({
 
     getInitialState() {
+        // for debugging purposes
         window.Game = this;
         this.props.socket.setUpdateListener(this.updateGameState);
         return {
@@ -142,7 +143,7 @@ export var Game = React.createClass({
 
         return (
             <main>
-                <h1>Avalon</h1>
+                <h1><img src="images/logo.png"/></h1>
                 <div className="container">
                     <Board game={this.state.game} quest={this.state.quest}/>
                     <Card player={this.state.player}
